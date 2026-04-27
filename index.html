@@ -69,6 +69,7 @@
     </div>
 
     <script>
+        // 1. Φόρτωση Άρθρων
         async function loadArticles() {
             try {
                 const response = await fetch('articles.json?v=' + Date.now());
@@ -99,6 +100,7 @@
             }
         }
 
+        // 2. Identity Logic για το Admin Button
         if (window.netlifyIdentity) {
             const adminBtn = document.getElementById('admin-link');
 
@@ -110,7 +112,6 @@
                 }
             };
 
-            // Έλεγχος κατά την αρχικοποίηση
             window.netlifyIdentity.on("init", user => {
                 updateAdminUI(user);
             });
@@ -138,12 +139,6 @@
 
         function goToSelection() {
             window.location.href = 'select.html';
-        }
-
-        const code = "ΜΠΙΤΣΕ";
-        const userInput = prompt("Δώσε τον κωδικό για να μπεις:");
-        if (userInput !== code) {
-            document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:100px;'>ΔΕΝ ΕΙΣΑΙ ΑΠΟ ΤΗΝ ΠΑΡΕΑ ❌</h1>";
         }
     </script>
 </body>
