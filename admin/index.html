@@ -5,8 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - Ανεργοι Ποδοχωριου</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    @media (max-width: 768px) {
+      [class^="Pane2"] {
+        display: none !important;
+      }
+      [class^="Pane1"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+      }
+      [class^="AppHeaderContent"] {
+        padding: 0 10px !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    CMS.registerPreviewStyle(""); 
+    CMS.registerPreviewTemplate("news", ({ entry }) => null);
+  </script>
 </body>
 </html>
