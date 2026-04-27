@@ -11,14 +11,6 @@
 </head>
 <body>
 
-    <div id="troll-popup" class="hidden">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">[X]</span>
-            <h3>ΠΡΟΣΟΧΗ!!!</h3>
-            <p>Κερδίσατε μια δωρεάν ώρα με τον Κούλη Πατήστε <a href="https://youtu.be/dQw4w9WgXcQ?si=r2tSrOiVvtxxx3CS">εδώ</a> για να τον παραλάβετε (Γιατί να θες μια ώρα μαζί του ?).</p>
-        </div>
-    </div>
-
     <div class="main-wrapper">
         
         <header>
@@ -128,14 +120,7 @@
 
         window.onload = () => {
             loadArticles();
-            setTimeout(() => {
-                document.getElementById('troll-popup').classList.remove('hidden');
-            }, 3000);
         };
-
-        function closePopup() {
-            document.getElementById('troll-popup').classList.add('hidden');
-        }
 
         function goToSelection() {
             window.location.href = 'select.html';
