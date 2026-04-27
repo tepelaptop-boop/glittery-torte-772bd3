@@ -1,79 +1,7 @@
 const canvas = document.getElementById('presCanvas');
 const ctx = canvas.getContext('2d');
 
-// Στην αρχή του αρχείου, προσθήκη ελέγχου για iOS
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-function draw() {
-    ctx.save();
-    
-    // Το Shake στο iOS μπορεί να προκαλέσει πτώση FPS, το περιορίζουμε
-    if (shake > 1) {
-        let s = isIOS ? shake * 0.5 : shake;
-        ctx.translate(Math.random()*s - s/2, Math.random()*s - s/2);
-    }
-
-    drawAtmosphere();
-
-    let w = Math.min(canvas.width * 0.35, 190);
-    let h = w * 1.3;
-    let groundY = canvas.height * 0.8;
-    let charY = groundY - h + 15;
-
-    // ΠΡΟΕΔΡΟΣ
-    if (presSide !== null && !isWarning) {
-        let px = presSide === 'left' ? canvas.width * 0.15 : canvas.width * 0.55;
-        ctx.save();
-        ctx.globalAlpha = 0.85;
-        
-        // Σημαντικό: Τα CSS filters στο Canvas σκοτώνουν το iPhone performance.
-        // Αν είναι iOS, χρησιμοποιούμε μόνο opacity και ένα απλό shadow.
-        if (isIOS) {
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = "red";
-        } else {
-            ctx.filter = "brightness(0.3) contrast(1.3) drop-shadow(0 0 15px rgba(255,0,0,0.8))";
-        }
-        
-        ctx.drawImage(presImg, px, charY - 5, w, h);
-        ctx.restore();
-        
-        ctx.fillStyle = "#ff0000";
-        ctx.fillRect(px + 25, charY - 20, (timer / difficulty.limit) * (w - 50), 5);
-    }
-
-    // ΠΑΙΚΤΗΣ
-    ctx.save();
-    if (isIOS) {
-        // Ελαφρύ φίλτρο για iOS
-        ctx.globalAlpha = 0.9;
-    } else {
-        ctx.filter = "brightness(0.7) saturate(0.6) hue-rotate(195deg) contrast(1.1) drop-shadow(-2px -2px 6px rgba(200,220,255,0.15))";
-    }
-    ctx.drawImage(playerImg, playerX, charY, w, h);
-    ctx.restore();
-
-    // UI - Χρήση Standard Γραμματοσειράς για συμβατότητα
-    ctx.fillStyle = "white";
-    ctx.font = "italic bold 32px sans-serif"; // sans-serif για να πιάσει το system font του iOS
-    ctx.textAlign = "center";
-    ctx.fillText(score, canvas.width/2, 70);
-
-    ctx.restore();
-    update();
-    
-    // Χρήση RequestAnimationFrame με fallback
-    if (active || shake > 0.1) {
-        window.requestAnimationFrame(draw);
-    }
-}
-
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resize);
-resize();
 
 const playerImg = new Image(); playerImg.src = 'Copilot_20260425_104706.png';
 const presImg = new Image(); presImg.src = 'Copilot_20260425_103520.png';
@@ -84,14 +12,19 @@ let highScore = localStorage.getItem('presHighScore') || 0;
 let playerSide = 'left';
 let playerX = 0; 
 let presSide = null;
-let lastPresSide = null;
 let isWarning = false;
 let timer = 0;
 let shake = 0;
 let bgOffset = 0;
 let flash = 0;
-
 let difficulty = { limit: 100, warningTime: 600, spawnRate: 2000, fakeChance: 0 };
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
 
 function startGame(mode) {
     document.getElementById('p-menu').classList.add('hidden');
@@ -124,7 +57,6 @@ function spawn() {
         let targetSide = Math.random() > 0.5 ? 'left' : 'right';
         let warningSide = targetSide;
 
-        // Fake-Out Logic (Hard/Nightmare)
         if (Math.random() < difficulty.fakeChance) {
             warningSide = (targetSide === 'left') ? 'right' : 'left';
         }
@@ -214,7 +146,11 @@ function update() {
 
 function draw() {
     ctx.save();
-    if (shake > 1) ctx.translate(Math.random()*shake - shake/2, Math.random()*shake - shake/2);
+    
+    if (shake > 1) {
+        let s = isIOS ? shake * 0.5 : shake;
+        ctx.translate(Math.random()*s - s/2, Math.random()*s - s/2);
+    }
 
     drawAtmosphere();
 
@@ -236,7 +172,14 @@ function draw() {
         let px = presSide === 'left' ? canvas.width * 0.15 : canvas.width * 0.55;
         ctx.save();
         ctx.globalAlpha = 0.85;
-        ctx.filter = "brightness(0.3) contrast(1.3) drop-shadow(0 0 15px rgba(255,0,0,0.8))";
+        
+        if (isIOS) {
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "red";
+        } else {
+            ctx.filter = "brightness(0.3) contrast(1.3) drop-shadow(0 0 15px rgba(255,0,0,0.8))";
+        }
+        
         ctx.drawImage(presImg, px, charY - 5, w, h);
         ctx.restore();
         
@@ -244,28 +187,45 @@ function draw() {
         ctx.fillRect(px + 25, charY - 20, (timer / difficulty.limit) * (w - 50), 5);
     }
 
-    ctx.fillStyle = "rgba(0,0,0,0.85)";
+    ctx.fillStyle = "rgba(0,0,0,0.6)";
     ctx.beginPath(); ctx.ellipse(playerX + w/2, groundY, w/3, 8, 0, 0, Math.PI*2); ctx.fill();
     
     ctx.save();
-    ctx.filter = "brightness(0.7) saturate(0.6) hue-rotate(195deg) contrast(1.1) drop-shadow(-2px -2px 6px rgba(200,220,255,0.15))";
+    if (!isIOS) {
+        ctx.filter = "brightness(0.7) saturate(0.6) hue-rotate(195deg) contrast(1.1) drop-shadow(-2px -2px 6px rgba(200,220,255,0.15))";
+    } else {
+        ctx.globalAlpha = 0.9;
+    }
     ctx.drawImage(playerImg, playerX, charY, w, h);
     ctx.restore();
 
-    ctx.fillStyle = "rgba(255,255,255,0.9)";
-    ctx.font = "italic bold 34px Arial";
+    ctx.fillStyle = "white";
+    ctx.font = "italic bold 32px sans-serif";
     ctx.textAlign = "center";
-    ctx.shadowBlur = 12; ctx.shadowColor = "rgba(0,0,0,0.5)";
+    ctx.shadowBlur = isIOS ? 0 : 12;
+    ctx.shadowColor = "rgba(0,0,0,0.5)";
     ctx.fillText(score, canvas.width/2, 70);
 
     ctx.restore();
     update();
-    if (active || shake > 0.1) requestAnimationFrame(draw);
+    
+    if (active || shake > 0.1) {
+        window.requestAnimationFrame(draw);
+    }
 }
 
 window.onkeydown = (e) => {
     if (e.key === "ArrowLeft") move('left');
     if (e.key === "ArrowRight") move('right');
 };
-document.getElementById('p-btn-left').onclick = (e) => { e.preventDefault(); move('left'); };
-document.getElementById('p-btn-right').onclick = (e) => { e.preventDefault(); move('right'); };
+
+const leftBtn = document.getElementById('p-btn-left');
+const rightBtn = document.getElementById('p-btn-right');
+
+const handleLeft = (e) => { e.preventDefault(); move('left'); };
+const handleRight = (e) => { e.preventDefault(); move('right'); };
+
+leftBtn.addEventListener('touchstart', handleLeft, {passive: false});
+leftBtn.addEventListener('mousedown', handleLeft);
+rightBtn.addEventListener('touchstart', handleRight, {passive: false});
+rightBtn.addEventListener('mousedown', handleRight);
