@@ -1,4 +1,3 @@
-/* Κακόγουστο Reset */
 * {
     margin: 0;
     padding: 0;
@@ -6,22 +5,21 @@
 }
 
 body {
-    background-color: #000080; /* Κλασικό μπλε των 90s */
-    background-image: url('https://web.archive.org/web/20091022131902/http://geocities.com/Heartland/Hills/1410/bg_stars.gif'); /* Αστεράκια background */
-    color: #00ff00; /* Neon πράσινο */
-    font-family: "Times New Roman", Times, serif; /* 90s font */
-    cursor: url('https://web.archive.org/web/20091023161048/http://geocities.com/Heartland/Acres/9410/hand.gif'), auto; /* Custom Cursor */
+    background-color: #000080;
+    background-image: url('https://web.archive.org/web/20091022131902/http://geocities.com/Heartland/Hills/1410/bg_stars.gif');
+    color: #00ff00; 
+    font-family: "Times New Roman", Times, serif; 
+    cursor: url('https://web.archive.org/web/20091023161048/http://geocities.com/Heartland/Acres/9410/hand.gif'), auto; 
 }
 
 .main-wrapper {
     max-width: 800px;
     margin: 0 auto;
-    border: 10px solid #c0c0c0; /* Γκρι border σαν παράθυρο Windows */
+    border: 10px solid #c0c0c0; 
     background: #000;
     padding: 10px;
 }
 
-/* Header & Title */
 header {
     text-align: center;
     border-bottom: 5px dashed red;
@@ -69,7 +67,6 @@ header {
     background-color: #d000d0;
 }
 
-/* Blink Animation */
 .blink {
     animation: blinker 1s linear infinite;
 }
@@ -78,7 +75,6 @@ header {
     50% { opacity: 0; }
 }
 
-/* Main Content & Sidebars */
 main {
     display: flex;
     gap: 10px;
@@ -112,7 +108,6 @@ main {
 .content h2 { color: cyan; margin-bottom: 10px; }
 .content ul { list-style-type: square; margin-left: 20px; }
 
-/* Footer */
 footer {
     text-align: center;
     margin-top: 20px;
@@ -122,39 +117,15 @@ footer {
     padding-top: 10px;
 }
 
-/* Pop-up Στυλ */
-#troll-popup {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 1000;
-}
-
-.popup-content {
-    background: white; color: black;
-    padding: 30px; border: 5px solid red;
-    text-align: center; position: relative;
-}
-
-.popup-content .close {
-    position: absolute; top: 5px; right: 5px;
-    cursor: pointer; color: red; font-weight: bold;
-}
-
-.hidden { display: none !important; }
-
-/* Mobile Friendly Ρυθμίσεις */
 @media (max-width: 600px) {
     main { flex-direction: column; }
     .hero-container h1 { font-size: 2rem; }
     .mobile-hidden { display: none; }
 }
 
-/* Πρόσθεσε αυτά στο τέλος του αρχείου index.css */
 
 .article-card {
-    border: 3px outset #c0c0c0; /* Windows 95 effect */
+    border: 3px outset #c0c0c0;
     background: #000;
     margin-top: 10px;
     padding: 10px;
