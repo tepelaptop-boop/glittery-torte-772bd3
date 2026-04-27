@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Presidential Shadow</title>
+    <link rel="stylesheet" href="pres_style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="presCanvas"></canvas>
+        
+        <div id="p-menu">
+            <h1 style="color:#ff4757; text-shadow:0 0 20px red;">PRESIDENTIAL SHADOW</h1>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 15px; max-width: 320px;">
+                <p style="font-weight: bold; color: #ffa502;">ΟΔΗΓΙΕΣ:</p>
+                <p style="font-size:0.9rem; line-height: 1.4;">
+                    Ο Πρόεδρος παραμονεύει στις σκιές.<br>
+                    Μόλις δεις την <b>κόκκινη αύρα</b>, ετοιμάσου.<br>
+                    Ο στόχος σου είναι <b>να μην σε ακουμπήσει</b>.<br>
+                    Προσοχή: Στα δύσκολα επίπεδα μπορεί να σε <b>παραπλανήσει</b>!
+                </p>
+            </div>
+            <div style="margin-top:10px;">
+                <button onclick="startGame('easy')" class="m-btn">EASY</button>
+                <button onclick="startGame('hard')" class="m-btn hard">HARD</button>
+                <button onclick="startGame('nightmare')" class="m-btn nightmare">NIGHTMARE</button>
+            </div>
+            <button onclick="window.location.href='select.html'" style="background:transparent; color:#888; border:none; margin-top:15px; cursor:pointer;">← Πίσω στην επιλογή</button>
+        </div>
+
+        <div id="mobile-controls" class="hidden">
+            <button id="p-btn-left" class="control-btn">←</button>
+            <button id="p-btn-right" class="control-btn">→</button>
+        </div>
+
+        <div id="p-game-over" class="hidden">
+            <h1 style="color:red; text-shadow: 0 0 15px rgba(255,0,0,0.5);">ΣΕ ΑΚΟΥΜΠΗΣΕ!</h1>
+            <p style="font-size: 1.2rem;">Σκορ: <span id="final-score">0</span></p>
+            <p style="color:#ffa502; letter-spacing: 1px;">BEST: <span id="high-score-display">0</span></p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                <button class="m-btn" onclick="location.reload()">ΔΟΚΙΜΑΣΕ ΞΑΝΑ</button>
+                <button class="m-btn" style="background:#444;" onclick="window.location.href='select.html'">ΚΥΡΙΟ ΜΕΝΟΥ</button>
+            </div>
+        </div>
+    </div>
+    <script src="pres_game.js"></script>
+</body>
+</html>

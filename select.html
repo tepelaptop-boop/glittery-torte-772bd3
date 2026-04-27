@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>--- ΔΙΑΛΕΞΕ ΤΟΝ ΑΧΡΗΣΤΟ ---</title>
+    <link rel="stylesheet" href="select.css">
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <header>
+            <marquee behavior="scroll" direction="left" scrollamount="10">
+                >>> ΔΙΑΛΕΞΕ ΠΑΙΚΤΗ ΓΙΑ ΝΑ ΧΑΣΕΙΣ <<<
+            </marquee>
+            <h1 class="rainbow-text">HALL OF SHAME</h1>
+        </header>
+
+        <main class="selection-grid">
+            
+            <div class="char-card" onclick="finalSelection('Πρόεδρος')">
+                <div class="glitch-container">
+                    <img src="Copilot_20260422_164418.png" alt="Πρόεδρος" class="char-img">
+                </div>
+                <div class="char-stats">
+                    <h2>Πρόεδρος</h2>
+                    <p class="blink" style="color: #ff4757;">PLAYABLE: Presidential Shadow</p>
+                    <p>SPECIAL: Μην τον αφήσεις να σε ακουμπήσει!
+                    </p>
+                    <div class="fake-bar"><div class="bar-fill" style="width: 15%"></div></div>
+                    <p id="best-score-ui" style="font-size: 0.7rem; color: #ffa502; margin-top: 5px;"></p>
+                </div>
+            </div>
+
+            <div class="char-card" onclick="finalSelection('Μαξ Κουρτάπεν')">
+                <div class="glitch-container">
+                    <img src="Copilot_20260422_165917.png" alt="Μαξ Κουρτάπεν" class="char-img">
+                </div>
+                <div class="char-stats">
+                    <h2>Μαξ Κουρτάπεν</h2>
+                    <p>Σταμίνα: 1.5 λεπτό</p>
+                    <p>SPECIAL: BikiniBottomDriver</p>
+                    <div class="fake-bar"><div class="bar-fill" style="width: 90%"></div></div>
+                </div>
+            </div>
+
+            <div class="char-card" onclick="finalSelection('Νέγρος')">
+                <div class="glitch-container">
+                    <img src="Copilot_20260422_165007.png" alt="Νέγρος" class="char-img">
+                </div>
+                <div class="char-stats">
+                    <h2>Νέγρος</h2>
+                    <p>SPECIAL: Άφαντος</p>
+                    <p class="blink">COMING SOON</p>
+                    <div class="fake-bar"><div class="bar-fill" style="width: 5%"></div></div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer>
+            <a href="index.html" class="back-link"><<< ΠΙΣΩ ΣΤΟ ΧΑΟΣ</a>
+        </footer>
+    </div>
+
+<script>
+
+const savedScore = localStorage.getItem('presHighScore');
+if(savedScore) {
+    document.getElementById('best-score-ui').innerText = "BEST SCORE: " + savedScore;
+}
+
+function finalSelection(playerName) {
+    if(playerName === 'Μαξ Κουρτάπεν') {
+        window.location.href = 'instructions.html'; 
+    } 
+    else if(playerName === 'Πρόεδρος') {
+       
+        window.location.href = 'president_game.html'; 
+    } 
+    else {
+        alert("Ο " + playerName + " είναι ακόμα σε διακοπές. Διάλεξε κάποιον άλλον!");
+    }
+}
+</script>
+</body>
+</html>

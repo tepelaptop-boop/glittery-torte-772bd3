@@ -1,0 +1,19 @@
+backend:
+  name: git-gateway
+  branch: main # Σιγουρέψου ότι το branch σου στο GitHub λέγεται main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "blog"
+    label: "Εφημερίδα"
+    folder: "/" # Θα αποθηκεύει στο root
+    extension: "json"
+    identifier_field: title
+    create: true
+    slug: "articles" # Θα γράφει πάνω στο articles.json
+    fields:
+      - { label: "Τίτλος", name: "title", widget: "string" }
+      - { label: "Ημερομηνία", name: "date", widget: "string" }
+      - { label: "Περιεχόμενο", name: "content", widget: "text" }

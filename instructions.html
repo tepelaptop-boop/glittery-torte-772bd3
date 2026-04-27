@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Οδηγίες & Επιλογή Δυσκολίας</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            background: #2a2a2a;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 { border-bottom: 2px solid #444; padding-bottom: 10px; }
+        .rules { text-align: left; margin: 20px 0; line-height: 1.6; }
+        .difficulty-modes { display: flex; flex-direction: column; gap: 10px; }
+        button {
+            padding: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .easy { background: #2ecc71; color: white; }
+        .medium { background: #f1c40f; color: black; }
+        .tryhard { background: #e74c3c; color: white; }
+        button:hover { opacity: 0.8; transform: scale(1.02); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Οδηγίες Παιχνιδιού</h1>
+        <div class="rules">
+            <ul>
+                <li><strong>Στόχος:</strong> Αποφύγετε τα επερχόμενα A3 για όσο το δυνατόν μεγαλύτερο χρονικό διάστημα.</li>
+                <li><strong>Χειρισμός:</strong> Χρησιμοποιήστε τα βέλη (Αριστερά/Δεξιά) ή πατήστε στα πλάγια της οθόνης.</li>
+                <li><strong>Score:</strong> Κάθε A3 που δεν σα χτυπάει προσθέτει 1 πόντο.</li>
+                <li><strong>Μπύρες:</strong> Συλλέξτε τις για +10 πόντους (Προσοχή: προκαλούν οπτική αστάθεια).</li>
+            </ul>
+        </div>
+        <hr>
+        <h3>Επιλέξτε Επίπεδο Δυσκολίας</h3>
+        <div class="difficulty-modes">
+            <button class="easy" onclick="startGame('easy')">EASY (Χαμηλή ταχύτητα)</button>
+            <button class="medium" onclick="startGame('medium')">MEDIUM (Κανονική ταχύτητα)</button>
+            <button class="tryhard" onclick="startGame('tryhard')">TRYHARD (Υψηλή ταχύτητα)</button>
+        </div>
+    </div>
+
+    <script>
+        function startGame(mode) {
+            localStorage.setItem('gameDifficulty', mode);
+            window.location.href = 'game.html';
+        }
+    </script>
+</body>
+</html>

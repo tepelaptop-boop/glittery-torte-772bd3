@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ΜΑΞ ΚΟΥΡΤΑΠΕΝ - ROAD RAGE</title>
+    <link rel="stylesheet" href="game.css">
+</head>
+<body>
+
+    <div id="game-ui">
+    <div class="score-container">
+        ΣΚΟΡ: <span id="score-val">0</span><br>
+        <small>ΡΕΚΟΡ: <span id="high-score-val">0</span></small>
+    </div>
+</div>
+        <div class="controls-hint">
+            <p>ΒΕΛΑΚΙΑ ή ΠΑΤΑ ΔΕΞΙΑ/ΑΡΙΣΤΕΡΑ ΣΤΗΝ ΟΘΟΝΗ</p>
+        </div>
+    </div>
+    
+    <canvas id="roadCanvas"></canvas>
+    <div id="mobile-controls">
+    <button id="btn-left" class="control-btn">←</button>
+    <button id="btn-right" class="control-btn">→</button>
+</div>
+
+    <div id="game-over" class="hidden">
+        <div class="overlay-content">
+            <h1 class="blink">ΧΤΥΠΗΘΗΚΕΣ ΑΠΟ ΕΝΑ AUDI A3</h1>
+            
+            <button class="retry-btn" onclick="location.reload()">ΞΑΝΑ ΠΡΟΣΠΑΘΗΣΕ</button>
+            <br>
+            <a href="select.html" class="exit-link">ΦΥΓΕ ΓΙΑ ΚΑΦΕ (ΠΙΣΩ)</a>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
