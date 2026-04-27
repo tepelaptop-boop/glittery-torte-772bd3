@@ -1,4 +1,3 @@
-// 1. ΡΥΘΜΙΣΕΙΣ ΔΥΣΚΟΛΙΑΣ
 const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
 let enemySpeed, spawnRate, changeLaneChance;
 
@@ -10,13 +9,16 @@ if (difficulty === 'easy') {
     enemySpeed = 9.5; spawnRate = 45; changeLaneChance = 0.035;
 }
 
-// 2. CANVAS SETUP
 const canvas = document.getElementById('roadCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth > 500 ? 400 : window.innerWidth;
-canvas.height = window.innerHeight;
 
-// 3. ΣΥΣΤΗΜΑ ΣΚΟΡ & ΡΕΚΟΡ (Safari Proof)
+function resizeCanvas() {
+    canvas.width = window.innerWidth > 500 ? 400 : window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
 let score = 0;
 let highScore = 0;
 try {
@@ -31,7 +33,6 @@ function refreshUI() {
 }
 refreshUI();
 
-// 4. ΜΕΤΑΒΛΗΤΕΣ ΠΑΙΧΝΙΔΙΟΥ
 let gameActive = true;
 let frameCount = 0;
 let enemies = [];
@@ -47,7 +48,6 @@ let lateralVelocity = 0;
 let touchSide = null;
 const friction = 0.85;
 
-// 5. ΦΟΡΤΩΣΗ ΕΙΚΟΝΩΝ
 const playerImg = new Image(); playerImg.src = 'Copilot_20260422_165007.png';
 const carImg = new Image(); carImg.src = 'Copilot_20260422_175337-removebg-preview.png';
 const beerImg = new Image(); beerImg.src = 'yuri_b-beer-4316330_1920.png';
@@ -55,14 +55,11 @@ const beerImg = new Image(); beerImg.src = 'yuri_b-beer-4316330_1920.png';
 const player = { x: canvas.width / 2 - 27, y: canvas.height - 150, w: 55, h: 85 };
 const lanes = [canvas.width * 0.15, canvas.width * 0.5 - 27, canvas.width * 0.85 - 55];
 
-// 6. ΕΛΕΓΧΟΣ (CONTROLS)
 const keys = {};
 
-// Πληκτρολόγιο (PC)
 window.addEventListener('keydown', e => { if(gameActive) keys[e.key] = true; });
 window.addEventListener('keyup', e => { keys[e.key] = false; });
 
-// Tap Buttons (Mobile)
 const btnLeft = document.getElementById('btn-left');
 const btnRight = document.getElementById('btn-right');
 
@@ -77,7 +74,10 @@ if (btnLeft && btnRight) {
     btnRight.addEventListener('touchend', stopTouch, {passive: false});
 }
 
-// 7. ΛΟΓΙΚΗ ΠΑΙΧΝΙΔΙΟΥ
+document.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) e.preventDefault();
+}, {passive: false});
+
 function saveHighScore() {
     if (score > highScore) {
         highScore = score;
@@ -102,7 +102,7 @@ function spawnEnemy() {
 }
 
 function checkCollision(a, b) {
-    const p = 16; // Περιθώριο για πιο δίκαιο collision
+    const p = 16; 
     return a.x + p < b.x + b.w - p && a.x + a.w - p > b.x + p && a.y + p < b.y + b.h - p && a.y + a.h - p > b.y + p;
 }
 
@@ -117,40 +117,31 @@ function update() {
     if (!gameActive) return;
     frameCount++;
 
-    // Slow-motion & Speed logic
     let baseSpeed = slowMoTimer > 0 ? enemySpeed * 0.4 : enemySpeed;
     if (slowMoTimer > 0) slowMoTimer--;
     let currentSpeed = nitroActive ? baseSpeed * 2 : baseSpeed;
 
-    // Drunk & Agility logic
     let agility = drunkTimer > 0 ? 0.6 : 1.5;
-    if (player.x < 30 || player.x > canvas.width - 80) agility *= 0.5; // Επιβράδυνση στις άκρες
+    if (player.x < 30 || player.x > canvas.width - 80) agility *= 0.5; 
     if (drunkTimer > 0) drunkTimer--;
 
-    // Movement
     if (keys['ArrowLeft'] || touchSide === 'left') lateralVelocity -= agility;
     if (keys['ArrowRight'] || touchSide === 'right') lateralVelocity += agility;
     lateralVelocity *= friction;
     player.x += lateralVelocity;
 
-    // Bounds
     if (player.x < 0) player.x = 0;
     if (player.x > canvas.width - player.w) player.x = canvas.width - player.w;
 
-    // Particles (Σκουπίδια στον δρόμο)
     if (frameCount % 15 === 0) particles.push({x: Math.random()*canvas.width, y:-10, s: Math.random()*3+1});
     particles.forEach((p, i) => { p.y += currentSpeed; if(p.y > canvas.height) particles.splice(i,1); });
 
-    // Spawning
     if (frameCount % spawnRate === 0) spawnEnemy();
     if (frameCount % 450 === 0) items.push({ x: lanes[Math.floor(Math.random()*3)], y: -50, w: 40, h: 40, type: 'beer' });
     if (frameCount % 1200 === 0) items.push({ x: lanes[Math.floor(Math.random()*3)], y: -50, w: 40, h: 40, type: 'nitro' });
 
-    // Enemies (Αυτοκίνητα)
     enemies.forEach((en, i) => {
         en.y += currentSpeed;
-
-        // Zig-Zag Logic
         if (Math.random() < changeLaneChance && en.y > 50 && en.y < canvas.height / 2) {
             let nextLane = Math.random() > 0.5 ? en.currentLane + 1 : en.currentLane - 1;
             if (nextLane >= 0 && nextLane <= 2) {
@@ -159,10 +150,7 @@ function update() {
             }
         }
         en.x += (en.targetX - en.x) * 0.08;
-
         if (!nitroActive && checkCollision(player, en)) gameOver();
-
-        // Near Miss (Αδρεναλίνη)
         if (!nitroActive && !en.missCounted && Math.abs(player.y - en.y) < 30 && Math.abs(player.x - en.x) < 70 && Math.abs(player.x - en.x) > 40) {
             score += 5;
             nearMissText = "ADRENALINE! +5";
@@ -171,7 +159,6 @@ function update() {
             en.missCounted = true;
             saveHighScore();
         }
-
         if (en.y > canvas.height) {
             enemies.splice(i, 1);
             score++;
@@ -182,7 +169,6 @@ function update() {
         }
     });
 
-    // Items
     items.forEach((it, i) => {
         it.y += currentSpeed;
         if (checkCollision(player, it)) {
@@ -193,44 +179,30 @@ function update() {
         }
         if (it.y > canvas.height) items.splice(i, 1);
     });
-
     if (nearMissTimer > 0) nearMissTimer--;
 }
 
-// 8. ΣΧΕΔΙΑΣΗ (GRAPHICS)
 function draw() {
     let drunkOffset = drunkTimer > 0 ? Math.sin(frameCount * 0.15) * 5 : 0;
     ctx.save();
     ctx.translate(drunkOffset, 0);
-
-    // Φόντο
     ctx.fillStyle = nightMode ? "#050505" : "#1e1e1e";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Dirt/Side zones
     ctx.fillStyle = nightMode ? "#111" : "#2d1e12";
     ctx.fillRect(0, 0, 30, canvas.height);
     ctx.fillRect(canvas.width - 30, 0, 30, canvas.height);
-
-    // Particles
     ctx.fillStyle = "rgba(255,255,255,0.1)";
     particles.forEach(p => ctx.fillRect(p.x, p.y, p.s, p.s));
-
-    // Διαγράμμιση
     ctx.strokeStyle = nitroActive ? "#00ffff" : "rgba(255, 255, 255, 0.15)";
     ctx.setLineDash([40, 40]);
     ctx.lineDashOffset = -frameCount * (enemySpeed + 5);
     ctx.strokeRect(canvas.width * 0.33, -10, 1, canvas.height + 20);
     ctx.strokeRect(canvas.width * 0.66, -10, 1, canvas.height + 20);
-
-    // Player
     if (nitroActive) {
         ctx.fillStyle = "rgba(0, 255, 255, 0.2)";
         ctx.beginPath(); ctx.arc(player.x + player.w/2, player.y + player.h/2, 60, 0, Math.PI*2); ctx.fill();
     }
     ctx.drawImage(playerImg, player.x, player.y, player.w, player.h);
-
-    // Floating Text
     if (nearMissTimer > 0) {
         ctx.fillStyle = "yellow";
         ctx.font = "bold 24px sans-serif";
@@ -238,20 +210,16 @@ function draw() {
         ctx.fillText(nearMissText, player.x + player.w/2, player.y - 30);
         ctx.textAlign = "start";
     }
-
-    // Enemies & Items
     enemies.forEach(e => ctx.drawImage(carImg, e.x, e.y, e.w, e.h));
     items.forEach(it => {
         if (it.type === 'beer') ctx.drawImage(beerImg, it.x, it.y, it.w, it.h);
         else { ctx.fillStyle = "cyan"; ctx.beginPath(); ctx.arc(it.x+20, it.y+20, 15, 0, Math.PI*2); ctx.fill(); }
     });
-
     ctx.restore();
     update();
     if (gameActive) requestAnimationFrame(draw);
 }
 
-// 9. ΕΚΚΙΝΗΣΗ
 let loaded = 0;
 const start = () => { if(++loaded === 3) draw(); };
 playerImg.onload = carImg.onload = beerImg.onload = start;
