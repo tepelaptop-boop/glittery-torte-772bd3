@@ -6,16 +6,33 @@
   <title>Admin Panel - Ανεργοι Ποδοχωριου</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
+    .nc-entryEditor-controlPane.nc-entryEditor-previewPane {
+      display: none !important;
+    }
+
+    .nc-entryEditor-controlPane.nc-entryEditor-controlPane {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 1 1 100% !important;
+    }
+
     @media (max-width: 768px) {
-      [class^="Pane2"] {
-        display: none !important;
+      button {
+        min-height: 44px !important;
       }
-      [class^="Pane1"] {
+      
+      [class^="StyledListItemControl"] {
+        padding: 10px !important;
+        margin-bottom: 10px !important;
+        border: 1px solid #ccc !important;
+      }
+
+      input, textarea, select {
+        font-size: 16px !important;
+      }
+      
+      [class^="ListControlContainer"] {
         width: 100% !important;
-        flex: 1 1 100% !important;
-      }
-      [class^="AppHeaderContent"] {
-        padding: 0 10px !important;
       }
     }
   </style>
@@ -23,8 +40,7 @@
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    CMS.registerPreviewStyle(""); 
-    CMS.registerPreviewTemplate("news", ({ entry }) => null);
+    CMS.registerPreviewTemplate("news", () => null);
   </script>
 </body>
 </html>
