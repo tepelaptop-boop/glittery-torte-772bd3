@@ -1,19 +1,23 @@
 backend:
   name: git-gateway
-  branch: main # Σιγουρέψου ότι το branch σου στο GitHub λέγεται main
+  repo: tepelaptop-boop/glittery-torte-772bd3
+  branch: main
 
 media_folder: "images"
 public_folder: "/images"
 
 collections:
-  - name: "blog"
+  - name: "news"
     label: "Εφημερίδα"
-    folder: "/" # Θα αποθηκεύει στο root
-    extension: "json"
-    identifier_field: title
-    create: true
-    slug: "articles" # Θα γράφει πάνω στο articles.json
-    fields:
-      - { label: "Τίτλος", name: "title", widget: "string" }
-      - { label: "Ημερομηνία", name: "date", widget: "string" }
-      - { label: "Περιεχόμενο", name: "content", widget: "text" }
+    files:
+      - label: "Άρθρα Εφημερίδας"
+        name: "articles"
+        file: "articles.json"
+        fields:
+          - label: "Λίστα Άρθρων"
+            name: "articles"
+            widget: "list"
+            fields:
+              - { label: "Τίτλος", name: "title", widget: "string" }
+              - { label: "Ημερομηνία", name: "date", widget: "string" }
+              - { label: "Περιεχόμενο", name: "content", widget: "text" }
