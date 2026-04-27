@@ -64,19 +64,21 @@
     </div>
 
     <script>
-        // Φόρτωση Άρθρων από JSON
         async function loadArticles() {
             try {
-                // Προσθήκη timestamp για να μην κρατάει cache ο browser
                 const response = await fetch('articles.json?v=' + Date.now());
-                const articles = await response.json();
+                const data = await response.json();
                 const container = document.getElementById('articles-container');
                 container.innerHTML = ''; 
 
-                // Αν το JSON είναι αντικείμενο με κλειδί (λόγω CMS), το μετατρέπουμε σε array αν χρειαστεί
-                const artsArray = Array.isArray(articles) ? articles : [articles];
+                const articles = data.articles || [];
 
-                artsArray.forEach(art => {
+                if (articles.length === 0) {
+                    container.innerHTML = "<p>Δεν υπάρχουν νέα σήμερα.</p>";
+                    return;
+                }
+
+                articles.forEach(art => {
                     const artHTML = `
                         <div class="article-card">
                             <h3 style="color: yellow; margin-bottom: 5px;">> ${art.title}</h3>
@@ -90,6 +92,16 @@
                 console.error("Error:", err);
                 document.getElementById('articles-container').innerHTML = "<p>Δεν υπάρχουν νέα σήμερα.</p>";
             }
+        }
+
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
         }
 
         window.onload = () => {
@@ -107,18 +119,6 @@
             window.location.href = 'select.html';
         }
 
-        // 2. IDENTITY LOGIC - Ανακατεύθυνση στο Admin μετά το Login
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
-                }
-            });
-        }
-
-        // Κωδικός πρόσβασης
         const code = "ΜΠΙΤΣΕ";
         const userInput = prompt("Δώσε τον κωδικό για να μπεις:");
         if (userInput !== code) {
