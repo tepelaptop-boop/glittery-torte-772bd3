@@ -58,7 +58,6 @@ canvas { display: block; }
 body, html {
     margin: 0; padding: 0; width: 100%; height: 100%;
     overflow: hidden; background: #000;
-    /* Διόρθωση για iOS γραμματοσειρές */
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -66,14 +65,12 @@ body, html {
 
 canvas {
     display: block;
-    /* Force GPU acceleration */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
     image-rendering: -webkit-optimize-contrast;
 }
 
 .m-btn {
-    /* ... τα υπόλοιπα ... */
-    -webkit-appearance: none; /* Διόρθωση για κουμπιά σε Safari */
+    -webkit-appearance: none;
     appearance: none;
 }
