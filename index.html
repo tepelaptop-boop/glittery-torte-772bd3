@@ -59,6 +59,11 @@
 
         <footer>
             <p>Created by: ΑΝΕΡΓΟΙ ΠΟΔΟΧΩΡΙΟΥ | © 2026</p>
+            
+            <button id="admin-link" style="display: none; background: #ff00ff; color: white; border: 2px solid white; padding: 10px; margin-bottom: 15px; cursor: pointer; font-family: 'Courier New', Courier, monospace; font-weight: bold; width: 100%; max-width: 300px;" onclick="window.location.href='/admin/'">
+                >>> ΕΙΣΟΔΟΣ ΣΤΟ ΠΑΝΕΛ ΔΙΑΧΕΙΡΙΣΗΣ <<<
+            </button>
+
             <div data-netlify-identity-button></div>
         </footer>
     </div>
@@ -74,7 +79,7 @@
                 const articles = data.articles || [];
 
                 if (articles.length === 0) {
-                    container.innerHTML = "<p>Δεν υπάρχουν νέα σήμερα.</p>";
+                    container.innerHTML = "<p style='color: #888;'>Δεν υπάρχουν νέα σήμερα.</p>";
                     return;
                 }
 
@@ -89,18 +94,34 @@
                     container.innerHTML += artHTML;
                 });
             } catch (err) {
-                console.error("Error:", err);
+                console.error("Error loading articles:", err);
                 document.getElementById('articles-container').innerHTML = "<p>Δεν υπάρχουν νέα σήμερα.</p>";
             }
         }
 
         if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", () => {
-                        document.location.href = "/admin/";
-                    });
+            const adminBtn = document.getElementById('admin-link');
+
+            const updateAdminUI = (user) => {
+                if (user) {
+                    adminBtn.style.display = 'inline-block'; 
+                } else {
+                    adminBtn.style.display = 'none'; 
                 }
+            };
+
+            // Έλεγχος κατά την αρχικοποίηση
+            window.netlifyIdentity.on("init", user => {
+                updateAdminUI(user);
+            });
+
+            window.netlifyIdentity.on("login", user => {
+                updateAdminUI(user);
+                window.netlifyIdentity.close();
+            });
+
+            window.netlifyIdentity.on("logout", () => {
+                updateAdminUI(null);
             });
         }
 
